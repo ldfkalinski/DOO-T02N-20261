@@ -49,13 +49,14 @@ O programador apenas descreve a relação lógica, e o sistema determina como ch
 
 Comparação entre Java e Prolog
 
-| Critério             | Java (Imperativo)               | Prolog (Declarativo)          |
-|---------------------------------------------------------------------------------------|
-| Foco                | Como fazer                      | O que fazer                   |
-| Controle de fluxo   | Explícito (loops, condicionais) | Implícito (inferência lógica) |
-| Complexidade mental | Procedural                      | Abstrata/lógica               |
-| Execução            | Sequencial                      | Baseada em regras             |
+Aos critérios de comparação, no paradigma imperativo representado pela linguagem Java, o foco está em descrever como realizar determinada tarefa, enquanto 
+no paradigma declarativo, exemplificado pelo Prolog, o foco está em definir o que deve ser feito.
+Em relação ao controle de fluxo, o Java utiliza uma abordagem explícita, por meio de estruturas como loops e condicionais, permitindo ao desenvolvedor 
+controlar diretamente a execução do programa. Por outro lado, o Prolog apresenta um controle de fluxo implícito, baseado em mecanismos de inferência 
+lógica.
 
+Quanto à complexidade mental, o paradigma imperativo exige um raciocínio mais procedural, no qual o programador precisa pensar passo a passo. Já no 
+paradigma declarativo, o pensamento é mais abstrato e orientado à lógica.
 Enquanto o código em Java exige que o programador detalhe cada etapa da execução, o código em Prolog abstrai esse processo, permitindo que o sistema 
 resolva o problema com base em regras declaradas.
 
