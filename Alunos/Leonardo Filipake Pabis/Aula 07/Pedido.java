@@ -2,7 +2,7 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class Pedido {
+public class Pedido{
     private int id;
     private LocalDate dataCriacao;
     private LocalDate dataPagamento;
@@ -40,15 +40,24 @@ public class Pedido {
         
     }
 
-    public LocalDate getDataCriacao() {
+    public String getDataCriacaoString() {
+        String dataAtualString = Date.dataAtualString();
+        return dataAtualString;
+    }
+
+    public LocalDate getDataCriacaoDate(){
         return dataCriacao;
     }
 
     public void setDataCriacao() {
-        this.dataCriacao = Date.dataAtualToFormat();
+        this.dataCriacao = Date.dataAtualDate();
     }
 
-    public LocalDate getDataPagamento() {
+    public String getDataPagamentoString() {
+        return Date.dateToString(dataPagamento);
+    }
+
+    public LocalDate getDataPagamentoDate(){
         return dataPagamento;
     }
 
@@ -65,7 +74,7 @@ public class Pedido {
             this.dataPagamento = dataCerta;
             }
             else if (escolha == 2){
-                this.dataPagamento = Date.dataAtualToFormat();
+                this.dataPagamento = Date.dataAtualDate();
             }else {
                 System.out.println("Digite uma opcão válida:");
             }
@@ -73,7 +82,11 @@ public class Pedido {
        
     }
 
-    public LocalDate getDataVencimentoReserva() {
+    public String getDataVencimentoReservaString(){
+        return Date.dateToString(dataVencimentoReserva);
+    }
+
+    public LocalDate getDataVencimentoReservaDate() {
         return dataVencimentoReserva;
     }
 
@@ -125,7 +138,7 @@ public class Pedido {
     }
 
     public void gerarDescricaoVenda() {
-        System.out.println("Id do pedido: " + id + "| Criação: " + dataCriacao + " | Total: " + calcularValorTotal());
+        System.out.println("Id do pedido: " + id + " | Criação: " + getDataCriacaoString() + " | Total: " + calcularValorTotal());
     }
 
     

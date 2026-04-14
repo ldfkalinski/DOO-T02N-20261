@@ -69,10 +69,18 @@ public class Date {
         Main.VoltarMenu();
         }
 
-        public static LocalDate dataAtualToFormat() {
+        public static LocalDate dataAtualDate() {
             LocalDate dataAtual = LocalDate.now();
-            String dataAtualString = dataAtual.format(dateFormatter);
-            LocalDate dataAtualFormatada = Date.stringToDate(dataAtualString);
-            return dataAtualFormatada;
+            return dataAtual;
+        }
+
+        public static String dataAtualString(){
+            LocalDate dataAtual = LocalDate.now();
+            return dateFormatter.format(dataAtual);
+        }
+
+        public static String dateToString(LocalDate date){
+            String dataString = dateFormatter.format(date);
+            return dataString;
         }
     }

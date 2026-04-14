@@ -70,11 +70,13 @@ public class Main {
 
         System.out.println(item1.gerarDescicao());
         System.out.println(item2.gerarDescicao());
-
-        Pedido pedido5 = new Pedido(5, cliente10, vend2, loja1);
-
-
         
+        Pedido pedido5 = ProcessaPedido.processar(5, cliente10, vend2, loja1);
+        pedido5.adicionarItem(item1);
+        pedido5.adicionarItem(item2);
+        pedido5.getItens();
+        pedido5.gerarDescricaoVenda();
+
         menu();
 
     }
