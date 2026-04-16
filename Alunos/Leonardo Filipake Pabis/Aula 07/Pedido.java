@@ -13,6 +13,7 @@ public class Pedido {
     private Lojas loja;
     public ArrayList<Item> itens = new ArrayList<>();
     public HashMap<Item, Integer> quantidadeDosItens = new HashMap<>();
+    public Double totalCompra;
 
     public Pedido(){
 
@@ -65,29 +66,33 @@ public class Pedido {
     }
 
     public void setDataPagamento() {
-        int escolha = 0;
         if (dataVencimentoReserva.isAfter(Date.dataAtualDate())){
-            do { 
+            while(true){
+                int escolha = 0;
                 System.out.println("1 - Agendar pagamento\n2 - Pagar Agora");
                 escolha = Main.scan.nextInt();
                 Main.scan.nextLine();
                 if (escolha == 1){
-                    System.out.println("Para qual data deseja agendar? (dd/mm/aaaa)");
-                    String data = Main.scan.nextLine();
-                    LocalDate dataCerta = Date.stringToDate(data);
-                    if (dataCerta.isBefore(dataVencimentoReserva)){
-                        this.dataPagamento = dataCerta;
-                    }else{
-                        System.out.println("Data fora do prazo de validade, tente novamente");
+                    while(true){
+                        System.out.println("Para qual data deseja agendar? (dd/mm/aaaa)");
+                        String data = Main.scan.nextLine();
+                        LocalDate dataCerta = Date.stringToDate(data);
+                        if (dataCerta.isBefore(dataVencimentoReserva)){
+                            this.dataPagamento = dataCerta;
+                            break;
+                        }else{
+                            System.out.println("Data fora do prazo de validade, tente novamente");
+                        }
                     }
-                    
+                break; 
                 }
                 else if (escolha == 2){
                     this.dataPagamento = Date.dataAtualDate();
+                    break;
                 }else {
                     System.out.println("Digite uma opcão válida:");
                 }
-            } while (escolha != 1 || escolha != 2);
+            }
         } else {
             System.out.println("O pedido já está vencido.");
         }
@@ -142,17 +147,42 @@ public class Pedido {
         this.itens.add(item);
     }
 
+
+    public void setTotalCompra(double valor){
+        totalCompra = valor;
+    }
+
+    public void getValorTotal(){
+        double soma = 0;
+        for (int i = 0; i < itens.size(); i++){
+            double valor = itens.get(i).getValor();
+            Integer quantidade = quantidadeDosItens.get(itens.get(i));
+            soma = soma + (valor * quantidade);
+        }
+        setTotalCompra(soma);
+    }
+
     public double calcularValorTotal() {
         double soma = 0;
         for (int i = 0; i < itens.size(); i++) {
-            soma += itens.get(i).getValor();
+            int quantidadeItem = quantidadeDosItens.getOrDefault(itens.get(i), 0);
+            soma = soma + (itens.get(i).getValor() * quantidadeItem);
         }
         return soma;
     }
 
-    public void gerarDescricaoVenda() {
-        System.out.println("Id do pedido: " + id + " | Criação: " + getDataCriacaoString() + " | Total: " + calcularValorTotal());
+    public String gerarDescricaoVenda() {
+        return String.format("Id do pedido: " + id + " | Criação: " + getDataCriacaoString() + " | Total: " + calcularValorTotal());
     }
+
+    public Double getTotalCompra() {
+        return totalCompra;
+    }
+
+    public void setTotalCompra(Double totalCompra) {
+        this.totalCompra = totalCompra;
+    }
+
 
     
 

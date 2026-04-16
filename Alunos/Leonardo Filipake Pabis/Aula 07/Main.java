@@ -8,6 +8,8 @@ public class Main {
     static ArrayList <Vendas> vendas = new ArrayList<>();
     static double valor_de_venda_total = 0;
     static ArrayList <Item> itensLoja = new ArrayList<>();
+    static ArrayList<Pedido> pedidosTotais = new ArrayList<>();
+    static ArrayList<Lojas> lojas = new ArrayList<>();
     
     public static void main(String[] args){
         Lojas loja1 = new Lojas("Lojinha", "LOJINHARAZAOSOCIAL", "12345676543211", "Cafelandia", "Bairro nobre", "Rua rapida");
@@ -46,6 +48,9 @@ public class Main {
         loja1.clientes.add(cliente20);
         loja2.clientes.add(cliente10);
         
+        lojas.add(loja1);
+        lojas.add(loja2);
+
         Main.dadosLojas.add(loja1);
         Main.dadosLojas.add(loja2);
 
@@ -96,20 +101,21 @@ public class Main {
         System.out.println("********");
         System.out.println("* MENU *");
         System.out.println("********");
-        System.out.println("1 - Cálculo de preço total");
+        System.out.println("1 - Criar pedido");
         System.out.println("2 - Cálculo de troco");
         System.out.println("3 - Consultar vendas");
         System.out.println("4 - Alocar vendas totais");
         System.out.println("5 - Buscar vendas do dia");
         System.out.println("6 - Listar dados (loja, vendedores e clientes)");
-        System.out.println("7 - Sair");
+        System.out.println("7 - Listar pedidos");
+        System.out.println("8 - Sair");
         
         do{
             System.out.println("Digite uma opção válida");
             opcao = scan.nextInt();
             scan.nextLine();
             if (opcao == 1){
-                CalculoPrecoTotal();
+                criarPedido();
             }else if (opcao == 2){
                 CalculoDeTroco();
             }else if (opcao == 3){
@@ -120,16 +126,57 @@ public class Main {
                 Date.BuscarVendaDia();
             }else if (opcao == 6){
                 listarDados();
+            }else if (opcao == 7){
+                listarPedidos();
             }
-            else if (opcao == 7){
+            else if (opcao == 8){
                 Sair();
             }
-        }while (opcao != 7);
+        }while (opcao != 8);
 
     }
 
-    public static void criarPedido(int id, Clientes cliente, Vendedor vendedor, Lojas loja, String dataVencimento){
-        Pedido pedido = ProcessaPedido.processar(id, cliente, vendedor, loja, dataVencimento);
+    public static void criarPedido(){
+        int id = (pedidosTotais.size()+1);
+
+        System.out.println("Escolha a loja:(só opcao 1 funciona)");
+        Lojas loja = null;
+        for (int i = 0; i < lojas.size(); i++){
+            System.out.println((i+1)+" - " + lojas.get(i).getNomeFantasia());
+        }
+        int escolhaLoja = scan.nextInt();
+        scan.nextLine();
+        if (escolhaLoja == 1){
+            loja = lojas.get((escolhaLoja-1));
+        }
+
+        System.out.println("Escolha o vendedor da loja: (só opcao 1 funciona)");
+        for (int i = 0; i < loja.vendedores.size(); i++){
+            System.out.println((i+1)+" - "+loja.vendedores.get(i).getNome());
+        }
+        int escolhaVendedor = scan.nextInt();
+        scan.nextLine();
+        Vendedor vendedor = null;
+        if (escolhaVendedor == 1){
+            vendedor = loja.vendedores.get((escolhaVendedor-1));
+        }
+
+        System.out.println("Escolha o cliente da loja: (só opcao 1 funciona)");
+        for (int i = 0; i < loja.clientes.size(); i++){
+            System.out.println((i+1)+" - "+loja.clientes.get(i).getNome());
+        }
+        int escolhaCliente = scan.nextInt();
+        scan.nextLine();
+        Clientes cliente = null;
+        if (escolhaCliente == 1){
+            cliente = loja.clientes.get((escolhaCliente-1));
+        }
+
+        System.out.println("Escolha a data de vencimento: (dd/mm/aaaa)");
+        String escolhaData = scan.nextLine();
+
+        Pedido pedido = ProcessaPedido.processar(id, cliente, vendedor, loja, escolhaData);
+
         System.out.println("Itens disponíveis:");
         for (int i = 0; i < itensLoja.size(); i++){
             System.out.println(itensLoja.get(i).gerarDescicao());
@@ -175,7 +222,7 @@ public class Main {
                     System.out.println("Digite um ID válido");
                 }
             }
-            
+        break;
         }
     }
 
@@ -189,6 +236,9 @@ public class Main {
         }
         System.out.println("Total da compra: "+totalCompra);
         pedido.setDataPagamento();
+        pedido.setTotalCompra(totalCompra);
+        pedidosTotais.add(pedido);
+        menu();
     }
 
     public static void CalculoPrecoTotal(){
@@ -262,6 +312,13 @@ public class Main {
                 System.out.printf(" -");
                 dadosLojas.get(i).clientes.get(k).apresentarse();
             }
+        }
+        VoltarMenu();
+    }
+
+    public static void listarPedidos(){
+        for (int i = 0; i < pedidosTotais.size(); i++){
+            System.out.println(pedidosTotais.get(i).gerarDescricaoVenda()+" | Loja: "+pedidosTotais.get(i).getLoja().getNomeFantasia()+" | Cliente: "+pedidosTotais.get(i).getCliente().getNome()+" | Data vencimento: "+pedidosTotais.get(i).getDataVencimentoReservaString()+" | Data pagamento: "+pedidosTotais.get(i).getDataPagamentoString());
         }
         VoltarMenu();
     }
