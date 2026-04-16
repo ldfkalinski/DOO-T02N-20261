@@ -2,8 +2,10 @@ import java.util.Scanner;
 import objetos.Venda;
 import objetos.Vendedor;
 import objetos.VinculoCli;
+import objetos.VinculoGer;
 import objetos.VinculoVen;
 import objetos.Cliente;
+import objetos.Gerente;
 import objetos.Loja;
 import java.util.List;
 import java.util.ArrayList;
@@ -12,13 +14,15 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 
 public class Principal {
-   static Scanner scan = new Scanner(System.in);
-   static List <Venda> venda = new ArrayList<>();
+ static Scanner scan = new Scanner(System.in);
+   static List<Venda> venda = new ArrayList<>();
    static List<Vendedor> vendedores = new ArrayList<>();
+   static List<Gerente> gerentes = new ArrayList<>(); // Nova lista
    static List<Cliente> clientes = new ArrayList<>();
    static List<Loja> loja = new ArrayList<>();
    static List<VinculoVen> vinculosVendedores = new ArrayList<>();
-	static List<VinculoCli> vinculosClientes = new ArrayList<>();
+   static List<VinculoGer> vinculosGerentes = new ArrayList<>();
+   static List<VinculoCli> vinculosClientes = new ArrayList<>();
    private static double precoTot=0;
     public static void main(String[] args) {
 		popular();
@@ -55,40 +59,49 @@ public class Principal {
 		}
 	}
 	private static void menuGestor() {
-		int escolha=1111111;
+		int escolha = 1111111;
 		do {
-			System.out.println("-----Menu-----");
+			System.out.println("----- Menu Gestor -----");
 			System.out.println("[1] - Lojas");
-			System.out.println("[2] - Calcular media de salário de cada vendedor");
-			System.out.println("[3] - Bonus vendedores");
-			System.out.println("[0] - Sair");
+			System.out.println("[2] - Calcular média salarial (Vendedores e Gerentes)");
+			System.out.println("[3] - Bônus (Vendedores e Gerentes)");
+			System.out.println("[0] - Voltar");
 			
 			escolha = scan.nextInt();
 			scan.nextLine();
 			validarEscolhaGestor(escolha);
-		}while(escolha != 0);
+		} while(escolha != 0);
 	}
+
 	private static void validarEscolhaGestor(int escolha) {
 		switch (escolha) {
-		case 1:
-			mostrarLojas();
-			break;
-		case 2:
-			for(Vendedor v : vendedores) {
-                System.out.println("Vendedor: " + v.getNome() + " - Média: " + v.calcularMedia());
-            }
-			break;
-		case 3:
-			for(Vendedor v : vendedores) {
-                System.out.println("Vendedor: " + v.getNome() + " - Bônus: " + v.calcularBonus());
-            }
-			break;
-		case 0:
-			System.out.println("Obrigado por utilizar o sistema.");
-			break;
-		default:
-			System.out.println("Selecione uma opção valida");
-			break;
+			case 1:
+				mostrarLojas();
+				break;
+			case 2:
+				System.out.println("\n--- MÉDIAS SALARIAIS ---");
+				for(Vendedor v : vendedores) {
+					System.out.println("Vendedor: " + v.getNome() + " - Média: " + v.calcularMedia());
+				}
+				for(Gerente g : gerentes) {
+					System.out.println("Gerente: " + g.getNome() + " - Média: " + g.calcularMedia());
+				}
+				break;
+			case 3:
+				System.out.println("\n--- BÔNUS DOS COLABORADORES ---");
+				for(Vendedor v : vendedores) {
+					System.out.println("Vendedor: " + v.getNome() + " - Bônus (20%): " + v.calcularBonus());
+				}
+				for(Gerente g : gerentes) {
+					System.out.println("Gerente: " + g.getNome() + " - Bônus (35%): " + g.calcularBonus());
+				}
+				break;
+			case 0:
+				System.out.println("Voltando ao menu principal...");
+				break;
+			default:
+				System.out.println("Selecione uma opção válida.");
+				break;
 		}
 	}
 
@@ -127,7 +140,8 @@ public class Principal {
 			exibirResumoLoja(selecionada);
 			
 			System.out.println("[1] Listar Vendedores (Detalhado)");
-			System.out.println("[2] Listar Clientes (Detalhado)");
+			System.out.println("[2] Listar Gerentes (Detalhado)"); // Nova opção
+			System.out.println("[3] Listar Clientes (Detalhado)");
 			System.out.println("[0] Voltar");
 			
 			op = scan.nextInt();
@@ -135,23 +149,39 @@ public class Principal {
 
 			switch (op) {
 				case 1 -> listarVendedoresDaLoja(selecionada);
-				case 2 -> listarClientesDaLoja(selecionada);
+				case 2 -> listarGerentesDaLoja(selecionada); // Novo método
+				case 3 -> listarClientesDaLoja(selecionada);
 				case 0 -> System.out.println("Voltando...");
 				default -> System.out.println("Opção inválida!");
 			}
 		} while (op != 0);
 	}
 
-	
 	private static void exibirResumoLoja(Loja selecionada) {
 		long totalVend = vinculosVendedores.stream().filter(v -> v.getIdLo() == selecionada.getIdLoja()).count();
 		long totalCli = vinculosClientes.stream().filter(v -> v.getIdLo() == selecionada.getIdLoja()).count();
+		long totalGer = vinculosGerentes.stream().filter(v -> v.getIdLo() == selecionada.getIdLoja()).count();
 
 		System.out.println("\n==============================");
 		selecionada.apresentarse();
+		System.out.println("Total de Gerentes: " + totalGer); 
 		System.out.println("Total de Vendedores: " + totalVend);
 		System.out.println("Total de Clientes: " + totalCli);
 		System.out.println("==============================");
+	}
+
+	private static void listarGerentesDaLoja(Loja selecionada) {
+		System.out.println("\n--- QUADRO DE GERÊNCIA ---");
+		vinculosGerentes.stream()
+			.filter(vg -> vg.getIdLo() == selecionada.getIdLoja())
+			.forEach(vg -> {
+				gerentes.stream()
+					.filter(g -> g.getIdGerente() == vg.getIdGer())
+					.forEach(g -> {
+						g.apresentarse();
+						System.out.println("--------------------");
+					});
+			});
 	}
 
 	
@@ -349,34 +379,41 @@ public class Principal {
 		}
 		
 	}
+	
 
 	private static void popular(){
 
-	Loja l1 = new Loja("Loja Centro", "Comércio Silva LTDA", "12.345.678/0001-01", "São Paulo", "Sé", "Rua Direita");
-    Loja l2 = new Loja("Loja Sul", "Vendas Costa S.A.", "98.765.432/0001-99", "Porto Alegre", "Ipanema", "Av. Guaíba");
-    loja.add(l1);
-    loja.add(l2);
+		Loja l1 = new Loja("Loja Centro", "Comércio Silva LTDA", "12.345.678/0001-01", "São Paulo", "Sé", "Rua Direita");
+		Loja l2 = new Loja("Loja Sul", "Vendas Costa S.A.", "98.765.432/0001-99", "Porto Alegre", "Ipanema", "Av. Guaíba");
+		loja.add(l1);
+		loja.add(l2);
 
-    vendedores.add(new Vendedor("Ana Silva", 28, l1.getNomeFantasia(), "São Paulo", "Sé", "Rua Direita", 2500.0));
-    vendedores.add(new Vendedor("Bruno Costa", 34, l2.getNomeFantasia(), "Porto Alegre", "Ipanema", "Av. Guaíba", 3000.0));
-    vendedores.add(new Vendedor("Carla Souza", 22, l1.getNomeFantasia(), "Manaus", "Adrianópolis", "Rua Maceió", 2200.0));
+		vendedores.add(new Vendedor("Ana Silva", 28, l1.getNomeFantasia(), "São Paulo", "Sé", "Rua Direita", 2500.0));
+		vendedores.add(new Vendedor("Bruno Costa", 34, l2.getNomeFantasia(), "Porto Alegre", "Ipanema", "Av. Guaíba", 3000.0));
+		vendedores.add(new Vendedor("Carla Souza", 22, l1.getNomeFantasia(), "Manaus", "Adrianópolis", "Rua Maceió", 2200.0));
 
-    clientes.add(new Cliente("Marcos Oliveira", 30, "São Paulo", "Centro", "Rua A"));
-    clientes.add(new Cliente("Julia Santos", 25, "Porto Alegre", "Sul", "Rua B"));
-    clientes.add(new Cliente("Roberto Lima", 45, "São Paulo", "Moema", "Rua C"));
-    clientes.add(new Cliente("Fernanda Cruz", 31, "Manaus", "Adrianópolis", "Rua D"));
-    clientes.add(new Cliente("Pedro Rocha", 19, "São Paulo", "Sé", "Rua E"));
+		clientes.add(new Cliente("Marcos Oliveira", 30, "São Paulo", "Centro", "Rua A"));
+		clientes.add(new Cliente("Julia Santos", 25, "Porto Alegre", "Sul", "Rua B"));
+		clientes.add(new Cliente("Roberto Lima", 45, "São Paulo", "Moema", "Rua C"));
+		clientes.add(new Cliente("Fernanda Cruz", 31, "Manaus", "Adrianópolis", "Rua D"));
+		clientes.add(new Cliente("Pedro Rocha", 19, "São Paulo", "Sé", "Rua E"));
 
-	vinculosVendedores.add(new VinculoVen(1, 1)); 
-    vinculosVendedores.add(new VinculoVen(2, 2)); 
-    vinculosVendedores.add(new VinculoVen(3, 1)); 
+		gerentes.add(new Gerente("Ricardo Souza", 40, "São Paulo", "Centro", "Rua Direita", 6000.0, l1));
+		gerentes.add(new Gerente("Helena Reis", 38, "Porto Alegre", "Ipanema", "Av. Guaíba", 6500.0, l2));
 
-    
-    vinculosClientes.add(new VinculoCli(1, 1)); 
-    vinculosClientes.add(new VinculoCli(2, 2)); 
-	vinculosClientes.add(new VinculoCli(3, 1)); 
-	vinculosClientes.add(new VinculoCli(4, 2)); 
-	vinculosClientes.add(new VinculoCli(5, 1)); 
+		vinculosVendedores.add(new VinculoVen(1, 1)); 
+		vinculosVendedores.add(new VinculoVen(2, 2)); 
+		vinculosVendedores.add(new VinculoVen(3, 1)); 
+
+		
+		vinculosClientes.add(new VinculoCli(1, 1)); 
+		vinculosClientes.add(new VinculoCli(2, 2)); 
+		vinculosClientes.add(new VinculoCli(3, 1)); 
+		vinculosClientes.add(new VinculoCli(4, 2)); 
+		vinculosClientes.add(new VinculoCli(5, 1)); 
+
+	    vinculosGerentes.add(new VinculoGer(1, 1));
+        vinculosGerentes.add(new VinculoGer(2, 2));
 	
 
 	}
