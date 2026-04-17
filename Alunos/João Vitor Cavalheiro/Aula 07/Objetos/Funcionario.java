@@ -3,7 +3,13 @@ public class Funcionario extends Pessoa{
     double[] salarioRecebido = new double[3];
     String loja;
 
-        public Funcionario(String nome, int idade, String cidade, String bairro, String rua, String loja ,double salarioBase, double[] salarioRecebido) {
+    public Funcionario(String nome, 
+        int idade, 
+        String cidade, 
+        String bairro, 
+        String rua, 
+         String loja ,
+        double salarioBase, double[] salarioRecebido) {
         super(nome, idade, cidade, bairro, rua);
         this.loja=loja;
         this.salarioBase=salarioBase;

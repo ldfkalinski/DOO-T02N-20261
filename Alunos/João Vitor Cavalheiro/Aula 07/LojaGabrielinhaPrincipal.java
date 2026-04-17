@@ -300,22 +300,26 @@ public class LojaGabrielinhaPrincipal {
 
 	private static void popular(){
 
-		Loja matriz = new Loja("My Plant", 
-		"Gabrielina", 
-		"12.345.678/0001-95", 
-		"Cascavel", 
-		"Santa Rita", 
-		"Av:Iguaçu");
+		Loja matriz = new Loja("Santa Rita", "", 
+			"", 
+			"", 
+			134, 
+			"", 
+			"", 
+			"", 
+			"5678");
 
-		Loja filial01 = new Loja("My Plant01", 
-		"Gabrielina", 
-		"98.765.432/0001-10", 
-		"Capitão", 
-		"Centro", 
-		"Av:Tancredo Neves");
+		Loja filial01 = new Loja("Santa Rita", "", 
+			"", 
+			"", 
+			134, 
+			"", 
+			"", 
+			"", 
+			"5678");
 
 		lojas.add(matriz);
-		lojas.add(filial01);
+
 
 		Cliente cliente1 = new Cliente("Leonardo Silva", 
 		18, 
