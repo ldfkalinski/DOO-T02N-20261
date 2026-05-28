@@ -13,6 +13,11 @@ public class App {
             frame.setSize(450, 320);
             frame.setLayout(new BorderLayout());
 
+            try {
+                ImageIcon iconeApp = new ImageIcon("icons/clear-day.png");
+                frame.setIconImage(iconeApp.getImage());
+            } catch (Exception e) {}
+
             JPanel painelTextos = new JPanel(new GridLayout(2, 1, 0, 15));
             painelTextos.setBorder(BorderFactory.createEmptyBorder(45, 35, 25, 35));
             painelTextos.setBackground(new Color(245, 247, 250));

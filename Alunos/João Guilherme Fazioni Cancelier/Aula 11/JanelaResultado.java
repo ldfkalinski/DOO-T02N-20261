@@ -10,6 +10,11 @@ public class JanelaResultado extends JFrame {
         setLayout(new BorderLayout());
         getContentPane().setBackground(Color.WHITE);
         
+        try {
+            ImageIcon iconeApp = new ImageIcon("icons/clear-day.png");
+            setIconImage(iconeApp.getImage());
+        } catch (Exception e) {}
+
         JPanel painelTopo = new JPanel(new GridLayout(2, 1, 0, 5));
         painelTopo.setBorder(BorderFactory.createEmptyBorder(25, 30, 10, 30));
         painelTopo.setBackground(Color.WHITE);
@@ -59,7 +64,7 @@ public class JanelaResultado extends JFrame {
         painelCentral.add(lblCondicao);
         painelCentral.add(Box.createRigidArea(new Dimension(0, 25)));
         
-        JPanel painelGrade = new JPanel(new GridLayout(3, 2, 20, 20));
+        JPanel painelGrade = new JPanel(new GridLayout(3, 2, 40, 20));
         painelGrade.setBackground(new Color(245, 247, 250));
         painelGrade.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(220, 225, 230), 1),
@@ -71,7 +76,7 @@ public class JanelaResultado extends JFrame {
         painelGrade.add(criarPainelMetrica("icons8-borrar-48", "Umidade:", dados.getUmidadeAr() + " %"));
         painelGrade.add(criarPainelMetrica("icons8-nuvem-de-chuva-48", "Chuva:", dados.getPrecipitacao() + " mm"));
         painelGrade.add(criarPainelMetrica("icons8-vento-48", "Vento:", dados.getVelocidadeVento() + " km/h"));
-        painelGrade.add(criarPainelMetrica("icons8-bússola-48", "Direção:", dados.getDirecaoVento() + "°"));
+        painelGrade.add(criarPainelMetrica("icons8-bússola-40", "Direção:", dados.getDirecaoVento() + "°"));
         
         painelCentral.add(painelGrade);
         
@@ -100,7 +105,7 @@ public class JanelaResultado extends JFrame {
         add(painelCentral, BorderLayout.CENTER);
         add(painelBaixo, BorderLayout.SOUTH);
 
-        painelCentral.setPreferredSize(new Dimension(480, 380));
+        painelCentral.setPreferredSize(new Dimension(460, 380));
         pack();
         setResizable(false);
         setLocationRelativeTo(null);
@@ -115,7 +120,7 @@ public class JanelaResultado extends JFrame {
         
         if (new File(caminhoMiniIcone).exists()) {
             ImageIcon iconImg = new ImageIcon(caminhoMiniIcone);
-            Image imgRedimensionada = iconImg.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+            Image imgRedimensionada = iconImg.getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
             lblMiniIcone.setIcon(new ImageIcon(imgRedimensionada));
         }
 
@@ -127,8 +132,8 @@ public class JanelaResultado extends JFrame {
         lblValor.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         lblValor.setForeground(new Color(33, 43, 54));
 
-        miniPainel.add(lblMiniIcone); 
-        miniPainel.add(lblTitulo);    
+        miniPainel.add(lblMiniIcone);
+        miniPainel.add(lblTitulo);
         miniPainel.add(lblValor);
         
         return miniPainel;

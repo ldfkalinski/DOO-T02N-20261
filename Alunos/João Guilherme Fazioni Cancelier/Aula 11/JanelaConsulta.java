@@ -24,8 +24,13 @@ public class JanelaConsulta extends JFrame {
     public JanelaConsulta() {
         setTitle("Consultar Clima");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(420, 360); // Tamanho fixo perfeito para o formulário vertical
+        setSize(420, 360);
         
+        try {
+            ImageIcon iconeApp = new ImageIcon("icons/clear-day.png");
+            setIconImage(iconeApp.getImage());
+        } catch (Exception e) {}
+
         JPanel painelPrincipal = new JPanel();
         painelPrincipal.setLayout(new BoxLayout(painelPrincipal, BoxLayout.Y_AXIS));
         painelPrincipal.setBorder(BorderFactory.createEmptyBorder(30, 40, 35, 40));
@@ -130,7 +135,7 @@ public class JanelaConsulta extends JFrame {
 
         new Thread(() -> {
             List<String> cidades = new ArrayList<>();
-            String url = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/%s/municipios".formatted(uf);
+             String url = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/%s/municipios".formatted(uf);
 
             try (HttpClient client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build()) {
                 HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
