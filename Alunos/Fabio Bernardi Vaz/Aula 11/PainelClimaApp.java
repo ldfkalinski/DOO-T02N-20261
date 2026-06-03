@@ -31,7 +31,6 @@ public class PainelClimaApp {
 
     private final BuscadorApiTempo buscadorApi;
 
-    // Cores do Tema Escuro
     private final Color FUNDO = new Color(20, 22, 30);
     private final Color FUNDO_CARDS = new Color(32, 35, 48);
     private final Color COR_FONTE_PRINCIPAL = new Color(230, 235, 240);
